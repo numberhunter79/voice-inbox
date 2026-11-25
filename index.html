@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <title>Voice Inbox</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header>
+    <span id="who" class="dim"></span>
+    <button id="queueBtn" class="chip" type="button" aria-label="Sync now">…</button>
+  </header>
+
+  <main>
+    <!-- Setup: shown until this phone has a link -->
+    <section id="setup" hidden>
+      <h1>Voice Inbox</h1>
+      <p class="dim">Open the setup link you were sent to start.</p>
+    </section>
+
+    <!-- Group links ask for a name once -->
+    <section id="askName" hidden>
+      <h1>What's your name?</h1>
+      <p class="dim">So your notes show who they're from.</p>
+      <input id="nameInput" type="text" autocomplete="name" maxlength="30">
+      <button id="nameSave" class="wide" type="button">Save</button>
+    </section>
+
+    <!-- The magic button -->
+    <section id="capture" hidden>
+      <div id="status" class="dim" aria-live="polite">Hold to record</div>
+      <div id="timer" class="timer" aria-hidden="true"></div>
+      <button id="mic" type="button" aria-label="Hold to record. Quick tap for hands-free.">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11h-2z"/></svg>
+      </button>
+      <div id="hint" class="dim small">Quick tap = hands-free</div>
+    </section>
+
+    <section id="recent" hidden>
+      <h2 class="dim small">Recent</h2>
+      <ul id="recentList"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <button id="shareBtn" class="link" type="button" hidden>Share</button>
+    <button id="moreBtn" class="link" type="button">More</button>
+  </footer>
+
+  <!-- Share panel (owner only) -->
+  <dialog id="shareDlg">
+    <h2>Share the button</h2>
+    <label>Who's it for?<input id="shareName" type="text" maxlength="30" placeholder="e.g. Partner"></label>
+    <fieldset>
+      <label><input type="radio" name="kind" value="person" checked> One person</label>
+      <label><input type="radio" name="kind" value="group"> A group (each asks their name)</label>
+    </fieldset>
+    <label>Where notes go<input id="shareDest" type="text" maxlength="40" value="Shared"></label>
+    <button id="shareMake" class="wide" type="button">Make link</button>
+    <div id="shareOut" hidden>
+      <div id="qr"></div>
+      <p class="small break" id="shareUrl"></p>
+      <button id="shareSend" class="wide" type="button">Send link…</button>
+      <button id="shareCopy" class="wide ghost" type="button">Copy link</button>
+    </div>
+    <h3 class="dim small">Links</h3>
+    <ul id="linkList" class="small"></ul>
+    <button class="wide ghost" type="button" data-close>Close</button>
+  </dialog>
+
+  <!-- More panel -->
+  <dialog id="moreDlg">
+    <h2>More</h2>
+    <p id="modelState" class="small dim"></p>
+    <p id="storageState" class="small dim"></p>
+    <button id="syncNow" class="wide" type="button">Sync now</button>
+    <button id="exportBtn" class="wide ghost" type="button">Download unsent notes</button>
+    <button id="ownerQr" class="wide ghost" type="button" hidden>Set up my other phone (QR)</button>
+    <div id="ownerQrOut" hidden></div>
+    <button id="forget" class="wide ghost danger" type="button">Remove this phone's setup</button>
+    <p class="small dim">Version <span id="ver"></span></p>
+    <button class="wide ghost" type="button" data-close>Close</button>
+  </dialog>
+
+  <script src="vendor/qrcode.js" defer></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
